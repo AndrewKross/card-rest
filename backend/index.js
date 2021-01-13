@@ -1,10 +1,15 @@
 const express = require("express")
-const DATA = require("./MOCK.json")
+const DATA = require("./mock.json")
 
 const app = express()
 const PORT = 4000
 
 let PAGE_SIZE = 9
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
 
 app.get('/', (req, res) => {
   if (req.query.page) {
