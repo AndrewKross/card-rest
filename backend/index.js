@@ -4,12 +4,15 @@ const DATA = require("./mock.json")
 const app = express()
 const PORT = 4000
 
-let PAGE_SIZE = 9
+let PAGE_SIZE = 10
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', '*');
   next();
 });
+
+app.use(express.json());
 
 app.get('/', (req, res) => {
   if (req.query.page) {
@@ -28,10 +31,10 @@ app.get('/total', (req, res) => {
   res.send(DATA.length.toString())
 })
 
-app.post('/', (req, res) => {
-  if (req.query['page_size'] === 9 || req.query['page_size'] === 12) {
-    PAGE_SIZE = req.query['page_size']
-    res.status(200).send(`Размер страницы был успешно изменен на ${req.query['page_size']}`)
+app.post('/page_size', (req, res) => {
+  if (Number.isInteger(req.body.pageSize)) {
+    PAGE_SIZE = req.body.pageSize
+    res.status(200).send(`Размер страницы был успешно изменен на ${req.body.pageSize}`)
   }
 })
 

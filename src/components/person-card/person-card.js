@@ -3,7 +3,7 @@ import {Avatar, Card, Col} from 'antd';
 
 const PersonCard = ({data}) => {
   return (
-      <Col span={8}>
+      <Col span={5}>
         <Card
           hoverable
           style={{width: 300, marginTop: 25}}
