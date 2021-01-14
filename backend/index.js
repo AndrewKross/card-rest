@@ -24,6 +24,10 @@ app.get('/get/:id/', (req, res) => {
   res.status(200).json(DATA.find(it => it.id.$oid === req.params.id))
 })
 
+app.get('/total', (req, res) => {
+  res.send(DATA.length.toString())
+})
+
 app.post('/', (req, res) => {
   if (req.query['page_size'] === 9 || req.query['page_size'] === 12) {
     PAGE_SIZE = req.query['page_size']
