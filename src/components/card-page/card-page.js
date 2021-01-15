@@ -3,14 +3,14 @@ import {api} from "../../index";
 import {Button} from "antd";
 import {AppRoute} from "../../const";
 
-const CardPage = ({ personId, history }) => {
+const CardPage = ({personId, history}) => {
   const [personData, setPersonData] = useState({})
 
   useEffect(() => {
     api.get(`/get/${personId}`).then((res) => setPersonData(res.data))
   }, [personId])
 
-  const { firstName, lastName, email, gender, ip, country, avatar, job } = personData
+  const {firstName, lastName, email, gender, ip, country, avatar, job} = personData
 
   return (
     <div className="card-page">

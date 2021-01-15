@@ -3,8 +3,16 @@ const DATA = require("./mock.json")
 
 const app = express()
 const PORT = 4000
-
 let PAGE_SIZE = 10
+
+const simpleData = DATA.map((card) => ({
+  id: card.id,
+  firstName: card.firstName,
+  lastName: card.lastName,
+  gender: card.gender,
+  email: card.email,
+  avatar: card.avatar,
+}))
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
@@ -16,10 +24,10 @@ app.use(express.json());
 
 app.get('/', (req, res) => {
   if (req.query.page) {
-    res.status(200).json(DATA.slice(PAGE_SIZE * (req.query.page - 1),
+    res.status(200).json(simpleData.slice(PAGE_SIZE * (req.query.page - 1),
       (PAGE_SIZE * (req.query.page - 1)) + PAGE_SIZE))
   } else {
-    res.status(200).json(DATA.slice(0, PAGE_SIZE))
+    res.status(200).json(simpleData.slice(0, PAGE_SIZE))
   }
 })
 

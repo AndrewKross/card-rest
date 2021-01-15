@@ -1,8 +1,8 @@
 import React from "react";
 import {BrowserRouter, Switch, Route, Link} from "react-router-dom";
-import {AppRoute} from "./const";
-import MainPage from "./components/main-page/main-page";
-import CardPage from "./components/card-page/card-page";
+import {AppRoute} from "../../const";
+import MainPage from "../main-page/main-page";
+import CardPage from "../card-page/card-page";
 
 const App = () => {
   return (

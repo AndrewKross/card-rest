@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from "react";
-import PersonCard from "../person-card/person-card"
-import { api } from "../../index";
-import { Row, Pagination } from "antd";
-import {withRouter} from "react-router-dom";
-import {AppRoute} from "../../const";
+import {api} from "../../index";
+import {Input, Pagination} from "antd";
+import "./main-page.css"
+import CardsList from "../cards-list/cards-list";
 
-const MainPage = ({ history }) => {
+const MainPage = () => {
   const [data, setData] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [totalCards, setTotalCards] = useState(0)
@@ -21,31 +20,22 @@ const MainPage = ({ history }) => {
   }
 
   const changePageSizeHandler = (size) => {
-    api.post('/page_size/', ({ pageSize: size })).then(() => {
+    api.post('/page_size/', ({pageSize: size})).then(() => {
       api.get('/').then((res) => setData(res.data))
       api.get('/total').then((res) => setTotalCards(res.data))
     })
   }
 
   return (
-        <div className="App">
-          <h1>Card-rest App</h1>
-          <Row gutter={16} align={'middle'} justify={'space-between'}>
-            {data.length === 0 ? <h2>Загрузка...</h2>
-              : data.map((card) => {
-                return (
-                  <div key={card.id.$oid} className="person-card-wrapper"
-                       onClick={() => history.push(`${AppRoute.CARD + card.id.$oid}`)}>
-                    <PersonCard data={card} />
-                  </div>
-                  )
-              })}
-          </Row>
-          <Pagination current={currentPage} disabled={totalCards === 0} total={totalCards}
-                      onChange={(page) => loadPageHandler(page)}
-                      onShowSizeChange={(page, size) => changePageSizeHandler(size)}/>,
-        </div>
+    <div className="main-page">
+      <h1>Card-rest App</h1>
+      <Input.Search placeholder="input search text" enterButton="Search" size="large" loading/>
+      <CardsList data={data}/>
+      <Pagination current={currentPage} disabled={totalCards === 0} total={totalCards} style={{marginTop: 25}}
+                  onChange={(page) => loadPageHandler(page)}
+                  onShowSizeChange={(page, size) => changePageSizeHandler(size)}/>
+    </div>
   );
 }
 
-export default withRouter(MainPage);
+export default MainPage;
