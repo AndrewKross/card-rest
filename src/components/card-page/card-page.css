@@ -1,0 +1,18 @@
+.card-page {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+    font-size: 18px;
+    padding: 2em;
+}
+
+.person-info {
+    margin-top: 25px;
+}
+
+.button-back {
+    margin-top: 25px;
+    width: 300px;
+}

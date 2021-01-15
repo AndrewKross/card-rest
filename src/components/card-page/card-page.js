@@ -1,31 +1,32 @@
-import React, {useEffect, useState} from 'react'
-import {api} from "../../index";
-import {Button} from "antd";
-import {AppRoute} from "../../const";
+import React, { useEffect, useState } from 'react'
+import { api } from "../../index";
+import { Button } from "antd";
+import { AppRoute } from "../../const";
+import "./card-page.css"
 
-const CardPage = ({personId, history}) => {
+const CardPage = ({ personId, history }) => {
   const [personData, setPersonData] = useState({})
 
   useEffect(() => {
     api.get(`/get/${personId}`).then((res) => setPersonData(res.data))
   }, [personId])
 
-  const {firstName, lastName, email, gender, ip, country, avatar, job} = personData
+  const { firstName, lastName, email, gender, ip, country, avatar, job } = personData
 
   return (
     <div className="card-page">
+      <h2>Details</h2>
       <div className="person-info">
-        <h2>Details</h2>
-        <div>First Name: {firstName}</div>
-        <div>Last Name: {lastName}</div>
-        <div>Last Name: {gender}</div>
-        <div>Email: {email}</div>
-        <div>IP Address: {ip}</div>
-        <div>Country: {country}</div>
-        <div>Job: {job}</div>
-        <div>Avatar: <img alt="avatar" src={avatar}/></div>
+        <p>First Name: {firstName}</p>
+        <p>Last Name: {lastName}</p>
+        <p>Gender: {gender}</p>
+        <p>Email: {email}</p>
+        <p>IP Address: {ip}</p>
+        <p>Country: {country}</p>
+        <p>Job: {job}</p>
+        <p>Avatar: <img alt="avatar" src={avatar}/></p>
       </div>
-      <Button onClick={() => history.push(AppRoute.MAIN)}>Go Back</Button>
+      <Button className="button-back" onClick={() => history.push(AppRoute.MAIN)}>Go Back</Button>
     </div>
   )
 }

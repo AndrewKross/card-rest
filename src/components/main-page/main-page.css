@@ -4,3 +4,26 @@
     align-items: center;
     padding: 1em 12em;
 }
+
+.search-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 70%;
+}
+
+.button-reset {
+    margin-left: 10px;
+    width: 70px;
+    height: 40px;
+    background: white;
+    color: #ff4d4f;
+    border: 1px solid #ff4d4f;
+    border-radius: 2px;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.015);
+    cursor: pointer;
+}
+
+.button-reset:hover {
+    opacity: 0.7;
+}

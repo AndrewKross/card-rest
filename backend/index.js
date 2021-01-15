@@ -3,7 +3,7 @@ const DATA = require("./mock.json")
 
 const app = express()
 const PORT = 4000
-let PAGE_SIZE = 10
+let pageSize = 10
 
 const simpleData = DATA.map((card) => ({
   id: card.id,
@@ -14,34 +14,45 @@ const simpleData = DATA.map((card) => ({
   avatar: card.avatar,
 }))
 
+app.use(express.json());
+
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', '*');
   next();
 });
 
-app.use(express.json());
-
-app.get('/', (req, res) => {
-  if (req.query.page) {
-    res.status(200).json(simpleData.slice(PAGE_SIZE * (req.query.page - 1),
-      (PAGE_SIZE * (req.query.page - 1)) + PAGE_SIZE))
-  } else {
-    res.status(200).json(simpleData.slice(0, PAGE_SIZE))
-  }
-})
-
 app.get('/get/:id/', (req, res) => {
   res.status(200).json(DATA.find(it => it.id.$oid === req.params.id))
 })
 
-app.get('/total', (req, res) => {
-  res.send(DATA.length.toString())
+app.get('/', (req, res) => {
+  let responseData = {
+    cards: [...simpleData.slice(0, pageSize)],
+    total: simpleData.length,
+  }
+
+  if (req.query.page) {
+    responseData.cards = simpleData.slice(pageSize * (req.query.page - 1),
+      (pageSize * (req.query.page - 1)) + pageSize)
+  }
+
+  if (req.query.search) {
+    const filteredData = simpleData.filter((card) => {
+      return card.firstName.toLowerCase().includes(req.query.search.toLowerCase()) ||
+        card.lastName.toLowerCase().includes(req.query.search.toLowerCase())
+    })
+    responseData.cards = filteredData.slice(pageSize * (req.query.page - 1),
+      (pageSize * (req.query.page - 1)) + pageSize)
+    responseData.total = filteredData.length
+  }
+
+  res.status(200).json(responseData)
 })
 
-app.post('/page_size', (req, res) => {
+app.post('/pageSize', (req, res) => {
   if (Number.isInteger(req.body.pageSize)) {
-    PAGE_SIZE = req.body.pageSize
+    pageSize = req.body.pageSize
     res.status(200).send(`Размер страницы был успешно изменен на ${req.body.pageSize}`)
   }
 })
