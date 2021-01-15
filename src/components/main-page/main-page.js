@@ -3,6 +3,7 @@ import { api } from "../../index";
 import { Input, Pagination, Spin } from "antd";
 import "./main-page.css"
 import CardsList from "../cards-list/cards-list";
+import { Routes } from "../../const";
 
 const MainPage = () => {
   const [data, setData] = useState([])
@@ -12,9 +13,9 @@ const MainPage = () => {
   const [searchValue, setSearchValue] = useState('')
 
   const getData = useCallback(() => {
-    let url = `/?page=${currentPage}`
+    let url = Routes.MAIN + Routes.GET_BY_PAGE + currentPage
     if (searchValue) {
-      url += `&search=${searchValue}`
+      url += Routes.SEARCH + searchValue
     }
     api.get(url).then((res) => {
       setData(res.data.cards)
@@ -28,7 +29,7 @@ const MainPage = () => {
   }, [getData])
 
   const changePageSizeHandler = (size) => {
-    api.post('/page_size/', ({ pageSize: size })).then(() => getData())
+    api.post(Routes.PAGE_SIZE, ({ pageSize: size })).then(() => getData())
   }
 
   return (

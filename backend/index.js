@@ -3,6 +3,13 @@ const DATA = require("./mock.json")
 
 const app = express()
 const PORT = 4000
+
+const Routes = {
+  MAIN: '/',
+  GET_BY_ID: '/get/:id/',
+  PAGE_SIZE: '/page_size',
+}
+
 let pageSize = 10
 
 const simpleData = DATA.map((card) => ({
@@ -22,11 +29,11 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/get/:id/', (req, res) => {
+app.get(Routes.GET_BY_ID, (req, res) => {
   res.status(200).json(DATA.find(it => it.id.$oid === req.params.id))
 })
 
-app.get('/', (req, res) => {
+app.get(Routes.MAIN, (req, res) => {
   let responseData = {
     cards: [...simpleData.slice(0, pageSize)],
     total: simpleData.length,
@@ -50,7 +57,7 @@ app.get('/', (req, res) => {
   res.status(200).json(responseData)
 })
 
-app.post('/pageSize', (req, res) => {
+app.post(Routes.PAGE_SIZE, (req, res) => {
   if (Number.isInteger(req.body.pageSize)) {
     pageSize = req.body.pageSize
     res.status(200).send(`Размер страницы был успешно изменен на ${req.body.pageSize}`)
