@@ -11,6 +11,7 @@ const MainPage = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [totalCards, setTotalCards] = useState(0)
   const [searchValue, setSearchValue] = useState('')
+  const [isError, setIsError] = useState(false)
 
   const getData = useCallback(() => {
     let url = Routes.MAIN + Routes.GET_BY_PAGE + currentPage
@@ -20,6 +21,9 @@ const MainPage = () => {
     api.get(url).then((res) => {
       setData(res.data.cards)
       setTotalCards(res.data.total)
+      setIsLoading(false)
+    }).catch(() => {
+      setIsError(true)
       setIsLoading(false)
     })
   }, [currentPage, searchValue])
@@ -32,19 +36,21 @@ const MainPage = () => {
     api.post(Routes.PAGE_SIZE, ({ pageSize: size })).then(() => getData())
   }
 
-  return (
+  return isError ? <h2>Can't connect to server, please try again later.</h2> : (
     <div className="main-page">
-      <h1>Card-rest App</h1>
+      <h1 className="header">Card-rest App</h1>
       <div className="search-wrapper">
-        <Input style={{ width: '50%' }} size="large" loading={isLoading}
+        <Input style={{ width: '50%', maxWidth: '500px' }} size="large" loading={isLoading.toString()}
                placeholder="Enter part of the first or last name"
                onChange={(evt) => setSearchValue(evt.target.value)} value={searchValue}/>
         <button onClick={() => setSearchValue('')} className="button-reset">Reset</button>
       </div>
       {isLoading ? <Spin size="large" style={{ marginTop: 40 }}/> : <CardsList data={data}/>}
-      <Pagination current={currentPage} disabled={totalCards === 0} total={totalCards} style={{ marginTop: 25 }}
-                  onChange={(page) => setCurrentPage(page)}
-                  onShowSizeChange={(page, size) => changePageSizeHandler(size)}/>
+      <div className="pagination-wrapper">
+        <Pagination current={currentPage} disabled={totalCards === 0} total={totalCards}
+                    onChange={(page) => setCurrentPage(page)}
+                    onShowSizeChange={(page, size) => changePageSizeHandler(size)}/>
+      </div>
     </div>
   );
 }
